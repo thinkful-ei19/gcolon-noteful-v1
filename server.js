@@ -17,6 +17,7 @@ console.log('This is George!');
 const express = require('express');
 const app = express();
 app.use(express.static('public'));
+app.use(express.json());
 
 function requestLogger(req, res, next) {
   const date = new Date();
@@ -24,6 +25,8 @@ function requestLogger(req, res, next) {
     `${date.toLocaleDateString()} ${date.toLocaleTimeString()} ${req.method} ${req.url}`);
   next();
 }
+
+
 
 app.get('/api/notes', requestLogger, (req, res) => {
 
@@ -38,11 +41,46 @@ app.get('/api/notes', requestLogger, (req, res) => {
   }
 });
 
-app.get('/api/notes/:id', (req, res) => {
-  res.json(data.find(item => item.id === Number(req.params.id)));
+app.put('/api/notes/:id', requestLogger, (req, res, next) => {
+  const id = req.params.id;
+
+  /***** Never trust users - validate input *****/
+  const updateObj = {};
+  const updateFields = ['title', 'content'];
+
+  updateFields.forEach(field => {
+    if (field in req.body) {
+      updateObj[field] = req.body[field];
+    }
+  });
+
+  notes.update(id, updateObj, (err, item) => {
+    if (err) {
+      return next(err);
+    }
+    if (item) {
+      res.json(item);
+    } else {
+      next();
+    }
+  });
 });
 
-app.get('/api/notes', (req, res, next) => {
+app.get('/api/notes/:id', requestLogger, (req, res, next) => {
+  const id = req.params.id;
+
+  notes.find(id, (err, item) => {
+    if (err) {
+      return next(err);
+    }
+    else{
+      res.json(item);
+    }
+  });
+});  
+
+
+app.get('/api/notes', requestLogger, (req, res, next) => {
   const { searchTerm } = req.query;
 
   notes.filter(searchTerm, (err, list) => {
@@ -76,5 +114,3 @@ app.listen(PORT, function () {
 }).on('error', err => {
   console.error(err);
 });
-
-
