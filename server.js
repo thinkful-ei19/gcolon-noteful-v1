@@ -21,7 +21,7 @@ app.use(express.json());
 
 function requestLogger(req, res, next) {
   const date = new Date();
-	console.log(
+  console.log(
     `${date.toLocaleDateString()} ${date.toLocaleTimeString()} ${req.method} ${req.url}`);
   next();
 }
@@ -82,7 +82,6 @@ app.get('/api/notes/:id', requestLogger, (req, res, next) => {
 
 app.get('/api/notes', requestLogger, (req, res, next) => {
   const { searchTerm } = req.query;
-
   notes.filter(searchTerm, (err, list) => {
     if (err) {
       return next(err); // goes to error handler
@@ -91,9 +90,15 @@ app.get('/api/notes', requestLogger, (req, res, next) => {
   });
 });
 
-app.get('/boom', (req, res, next) => {
-  throw new Error('Boom!!');
-});
+// WORK ON THIS LATER
+// app.patch('/api/notes/:title', requestLogger, (req, res, next) => {
+//   return console.log(req.query.title);
+//   // next();
+// });
+
+// app.get('/boom', (req, res, next) => {
+//   throw new Error('Boom!!');
+// });
 
 app.use(function (req, res, next) {
   var err = new Error('Not Found');
