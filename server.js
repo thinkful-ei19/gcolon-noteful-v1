@@ -42,6 +42,17 @@ app.get('/api/notes/:id', (req, res) => {
   res.json(data.find(item => item.id === Number(req.params.id)));
 });
 
+app.get('/api/notes', (req, res, next) => {
+  const { searchTerm } = req.query;
+
+  notes.filter(searchTerm, (err, list) => {
+    if (err) {
+      return next(err); // goes to error handler
+    }
+    res.json(list); // responds with filtered array
+  });
+});
+
 app.get('/boom', (req, res, next) => {
   throw new Error('Boom!!');
 });
