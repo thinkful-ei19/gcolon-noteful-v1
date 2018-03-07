@@ -1,7 +1,6 @@
-// 'use strict';
 // /* global */
 // // eslint-disable-next-line no-unused-vars
-// Jacob code
+// Jacob code read gist https://gist.github.com/cklanac/c721c8121f6880fff3aa72e96ebc047d
 'use strict';
 
 const { PORT } = require('./config');
