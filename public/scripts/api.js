@@ -31,5 +31,19 @@ const api = {
       data: JSON.stringify(obj),
       success: callback
     });
-  }
-}; 
+  },
+
+  create: function (obj, callback) {
+    $.ajax({
+      type: 'POST',
+      url: '/api/notes',
+      contentType: 'application/json',
+      dataType: 'json',
+      processData: false,
+      data: JSON.stringify(obj),
+      success: callback
+    });
+  },
+};
+
+

@@ -12,6 +12,7 @@ const notesRouter = require('./router/notes.router');
 console.log('This is George!');
 
 // INSERT EXPRESS APP CODE HERE...
+app.use(express.json());
 
 const { PORT } = require('./config');
 app.use('/api', notesRouter);
